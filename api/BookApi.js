@@ -44,21 +44,18 @@ router.post('/',async (req,res)=>{
     for (let j=0;j<books.length;j++) {
       if(books[j].shelfId === shelfs[i].shelfId){
         if(books[j].name == null){
-          //แทรกข้อมูลหากมีช่องว่าง
           await Book.findOneAndUpdate({bookid:books[j].bookid},{$set: req.body});
-          res.status(201).json({ msg: `book name :${books[j].name} has been added.`});
+          res.status(201).json({ msg: `book name :${req.body.name} has been added.`});
         }
         count++;
       }
     }
     if(count < 5){
-
       let payload = req.body;
       payload.shelfId = shelfs[i].shelfId;
       const book = new Book(payload);
       await book.save();
-      res.status(201).json({ msg: `book name :${books[j].name} has been added.`});
-      return;
+      res.status(201).json({ msg: `book name :${req.body.name} has been added.`});
     }
   }
   res.status(400).json({ msg: `bookshelf has been full, please insert new bookshelf`});
@@ -68,7 +65,7 @@ router.post('/',async (req,res)=>{
 });
 
 router.put('/',async(req,res)=>{
-  const payload = req.body
+  const payload = req.body;
   await Book.findOneAndUpdate({name:req.query.name},{$set:payload});
   res.status(200).json({ msg: `Update sucess!`});
 });

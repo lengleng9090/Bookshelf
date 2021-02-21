@@ -27,7 +27,7 @@ router.delete('/',async (req,res)=>{
   const books = await Book.find({});
   let bookFound = books.filter(book => book.shelfId == req.query.shelfId && book.name != null);
   if(bookFound.length>0){
-    res.status(400).json(req.query.shelfId + "have a book please remove book");
+    res.status(400).json({msg:`${req.query.shelfId} have a book please remove book`});
   }
   else{
     let booknull = books.filter(book => book.shelfId == req.query.shelfId && book.name == null);
@@ -36,7 +36,7 @@ router.delete('/',async (req,res)=>{
       await Book.findOneAndDelete({bookid:booknull[i].bookid});
     }
     await Shelf.findOneAndDelete({shelfId:num});
-    res.status(200).json(parseInt(req.query.shelfId+booknull.length));
+    res.status(200).json({msg:`delete ${req.query.shelfId} compelete.`});
   }
 });
 
